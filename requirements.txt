@@ -1,9 +1,6 @@
-torch
-torchvision
-torchaudio
-opencv-python
+torch>=2.0
+torchvision>=0.15
 numpy
-pandas
 matplotlib
 scikit-learn
 tqdm
