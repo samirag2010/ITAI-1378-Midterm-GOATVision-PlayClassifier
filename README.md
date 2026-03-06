@@ -1,7 +1,7 @@
-ITAI-1378 Midterm – G.O.A.T Vision: Soccer Event Classifier
+ITAI-1378 Midterm – G.O.A.T Vision: Game Outcome Action Tracker
 Project Name
 
-G.O.A.T Vision – Soccer Play Type Classifier
+G.O.A.T Vision – Game Outcome Action Tracker
 A computer vision system that classifies soccer event images into five play types using transfer learning with ResNet50.
 
 Course: ITAI 1378 – Computer Vision
@@ -120,12 +120,12 @@ Predicted Event Label
 
 Week-by-Week Plan
 Week	Task	Milestone
-Week 10	Dataset collection and cleaning	Dataset prepared
-Week 11	Model setup and preprocessing	Training pipeline ready
-Week 12	Train model and test predictions	Model learning
-Week 13	Evaluate results and confusion matrix	Performance analysis
-Week 14	Prepare slides and documentation	Presentation ready
-Week 15	Present project	Final submission
+Week 11	Dataset collection and cleaning	Dataset prepared
+Week 12	Model setup and preprocessing	Training pipeline ready
+Week 13	Train model and test predictions	Model learning
+Week 14	Evaluate results and confusion matrix	Performance analysis
+Week 15	Prepare slides and documentation	Presentation ready
+Week 16	Present project	Final submission (May 8th)
 
 Resources Needed
 Resource	Details
@@ -139,6 +139,7 @@ Risk	Probability	Mitigation
 Small dataset size	Medium	Data augmentation and transfer learning
 Ambiguous images	Medium	Manual dataset cleaning
 Class confusion	Low	Model fine-tuning and confusion matrix analysis
+
 AI Usage Log
 
 AI tools such as ChatGPT were used to assist with:
