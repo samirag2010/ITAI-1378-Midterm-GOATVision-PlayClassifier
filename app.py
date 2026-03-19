@@ -11,7 +11,7 @@ st.write("Soccer Play Classification App")
 model = models.resnet50(pretrained=False)
 model.fc = torch.nn.Linear(model.fc.in_features, 5)
 
-model.load_state_dict(torch.load("model.pth", map_location=torch.device('cpu')))
+model.load_state_dict(torch.load("model.pth", map_location=device, weights_only=False))
 model.eval()
 
 # Classes
