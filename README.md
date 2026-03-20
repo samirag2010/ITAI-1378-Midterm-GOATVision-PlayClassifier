@@ -1,8 +1,14 @@
+G.O.A.T Vision LIVE DEMO 
+https://goatvision-soccer.streamlit.app
+
+## 📸 Demo
+
+![G.O.A.T Vision Demo](docs/demo.png)
+
 ITAI-1378 Midterm – G.O.A.T Vision: Game Outcome Action Tracker
 Project Name
 
-G.O.A.T Vision – Game Outcome Action Tracker
-A computer vision system that classifies soccer event images into five play types using transfer learning with ResNet50.
+G.O.A.T Vision (Game Outcome Action Tracker) is a computer vision application that classifies soccer plays from images using a deep learning model (ResNet50). Users can upload an image and receive a prediction along with confidence scores.
 
 Course: ITAI 1378 – Computer Vision
 Student: Samira Gevara
@@ -33,6 +39,10 @@ Shot on Goal
 
 Yellow Card
 
+Displays prediction confidence
+
+Visual probability breakdown
+
 The system uses transfer learning with a pretrained ResNet50 model implemented in PyTorch. Images are preprocessed and passed through the neural network to produce a predicted soccer event class.
 
 Technical Approach
@@ -48,6 +58,10 @@ PyTorch
 torchvision
 
 scikit-learn
+
+Google Drive (model hosting via gdown)
+
+Streamlit
 
 matplotlib
 
@@ -72,6 +86,11 @@ shot
 yellow_card
 
 Images were collected from publicly available soccer imagery sources and manually cleaned to remove irrelevant or ambiguous images such as cartoons, logos, or unclear events.
+
+Deployment Notes
+
+Due to GitHub file size limits, the trained model is hosted externally on Google Drive.
+The app automatically downloads the model at runtime using gdown.
 
 Data Augmentation Used:
 
@@ -176,3 +195,10 @@ training with video frame sequences instead of single images
 implementing object detection to localize players and referees
 
 building a real-time match event detection system
+
+
+
+
+
+
+
