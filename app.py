@@ -45,15 +45,16 @@ def load_model():
     model = models.resnet50(weights=None)
     model.fc = nn.Linear(model.fc.in_features, len(CLASS_NAMES))
 
-    torch.load("goatvision_model_state_dict.pth", map_location=device, weights_only=False)
-    model.load_state_dict(state_dict)
+    state_dict = torch.load(
+        "goatvision_model_state_dict.pth",
+        map_location=device,
+        weights_only=False
+    )
 
+    model.load_state_dict(state_dict)
     model.to(device)
     model.eval()
     return model
-
-model = load_model()
-
 # -----------------------------
 # Image transforms
 # -----------------------------
