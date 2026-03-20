@@ -89,8 +89,25 @@ if uploaded_file is not None:
         probabilities = torch.softmax(outputs, dim=1)[0]
         predicted_index = torch.argmax(probabilities).item()
 
-    st.success(f"Prediction: {CLASS_NAMES[predicted_index]}")
-    st.write(f"Confidence: {probabilities[predicted_index].item():.2%}")
+    if uploaded_file is not None:
+    image = Image.open(uploaded_file).convert("RGB")
+    st.image(image, caption="Uploaded Image", use_container_width=True)
+
+    input_tensor = transform(image).unsqueeze(0).to(device)
+
+    with torch.no_grad():
+        outputs = model(input_tensor)
+        probabilities = torch.softmax(outputs, dim=1)[0]
+        predicted_index = torch.argmax(probabilities).item()
+
+    # 👇 REPLACE OLD OUTPUT WITH THIS
+    label = CLASS_NAMES[predicted_index].replace("_", " ").title()
+    confidence = probabilities[predicted_index].item()
+
+    st.markdown(f"## 🧠 Prediction: **{label}**")
+    st.write(f"Confidence: {confidence:.2%}")
+    st.progress(float(confidence))
+    
 
     st.subheader("Class Probabilities")
     prob_dict = {
