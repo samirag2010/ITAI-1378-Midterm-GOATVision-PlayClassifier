@@ -30,6 +30,8 @@ transform = transforms.Compose([
                          [0.229, 0.224, 0.225])
 ])
 
+input_tensor = input_tensor.to(device)
+
 # Upload image
 uploaded_file = st.file_uploader("Upload a soccer image", type=["jpg","png"])
 
