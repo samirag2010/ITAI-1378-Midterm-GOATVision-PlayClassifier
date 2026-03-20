@@ -3,6 +3,8 @@ from PIL import Image
 import torch
 import torch.nn as nn
 from torchvision import transforms, models
+import os
+import gdown
 
 # -----------------------------
 # Page setup
@@ -28,6 +30,13 @@ CLASS_NAMES = [
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+MODEL_PATH = "goatvision_model_state_dict.pth"
+
+if not os.path.exists(MODEL_PATH):
+    file_id = "14N0ECk_EqcMw6PdO1fr4bH12Hg30vEoY"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url, MODEL_PATH, quiet=False)
+
 # -----------------------------
 # Model loader
 # -----------------------------
@@ -36,7 +45,7 @@ def load_model():
     model = models.resnet50(weights=None)
     model.fc = nn.Linear(model.fc.in_features, len(CLASS_NAMES))
 
-    state_dict = torch.load("model.pth", map_location=device, weights_only=False)
+    torch.load("goatvision_model_state_dict.pth", map_location=device, weights_only=False)
     model.load_state_dict(state_dict)
 
     model.to(device)
