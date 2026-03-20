@@ -1,48 +1,87 @@
 import streamlit as st
 from PIL import Image
 import torch
+import torch.nn as nn
 from torchvision import transforms, models
 
-import torch
+# -----------------------------
+# Page setup
+# -----------------------------
+st.set_page_config(page_title="G.O.A.T Vision", page_icon="⚽", layout="centered")
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-# Title
 st.title("G.O.A.T Vision 🐐⚽")
 st.write("Soccer Play Classification App")
 
-# Load model
-model = models.resnet50(pretrained=False)
-model.fc = torch.nn.Linear(model.fc.in_features, 5)
-
-model.load_state_dict(torch.load("model.pth", map_location=device, weights_only=False))
-model.eval()
-
+# -----------------------------
 # Classes
-classes = ['corner_kick', 'free_kick', 'penalty_kick', 'shot', 'yellow_card']
+# -----------------------------
+CLASS_NAMES = [
+    "corner_kick",
+    "free_kick",
+    "penalty_kick",
+    "shot",
+    "yellow_card"
+]
 
-# Transform
+# -----------------------------
+# Device
+# -----------------------------
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# -----------------------------
+# Model loader
+# -----------------------------
+@st.cache_resource
+def load_model():
+    model = models.resnet50(weights=None)
+    model.fc = nn.Linear(model.fc.in_features, len(CLASS_NAMES))
+
+    state_dict = torch.load("model.pth", map_location=device, weights_only=False)
+    model.load_state_dict(state_dict)
+
+    model.to(device)
+    model.eval()
+    return model
+
+model = load_model()
+
+# -----------------------------
+# Image transforms
+# -----------------------------
 transform = transforms.Compose([
-    transforms.Resize((224,224)),
+    transforms.Resize((224, 224)),
     transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406],
-                         [0.229, 0.224, 0.225])
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
 ])
 
-input_tensor = input_tensor.to(device)
-
+# -----------------------------
 # Upload image
-uploaded_file = st.file_uploader("Upload a soccer image", type=["jpg","png"])
+# -----------------------------
+uploaded_file = st.file_uploader("Choose a soccer image", type=["jpg", "jpeg", "png"])
 
-if uploaded_file:
+if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    img = transform(image).unsqueeze(0)
+    input_tensor = transform(image).unsqueeze(0)
+    input_tensor = input_tensor.to(device)
 
     with torch.no_grad():
-        outputs = model(img)
-        _, pred = torch.max(outputs, 1)
+        outputs = model(input_tensor)
+        probabilities = torch.softmax(outputs, dim=1)[0]
+        predicted_index = torch.argmax(probabilities).item()
 
-    st.success(f"Prediction: {classes[pred.item()]}")
+    st.success(f"Prediction: {CLASS_NAMES[predicted_index]}")
+    st.write(f"Confidence: {probabilities[predicted_index].item():.2%}")
+
+    st.subheader("Class Probabilities")
+    prob_dict = {
+        CLASS_NAMES[i]: float(probabilities[i].item())
+        for i in range(len(CLASS_NAMES))
+    }
+    st.bar_chart(prob_dict)
+
+
