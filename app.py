@@ -30,6 +30,9 @@ CLASS_NAMES = [
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# -----------------------------
+# Model path + download
+# -----------------------------
 MODEL_PATH = "goatvision_model_state_dict.pth"
 
 if not os.path.exists(MODEL_PATH):
@@ -46,7 +49,7 @@ def load_model():
     model.fc = nn.Linear(model.fc.in_features, len(CLASS_NAMES))
 
     state_dict = torch.load(
-        "goatvision_model_state_dict.pth",
+        MODEL_PATH,
         map_location=device,
         weights_only=False
     )
@@ -55,6 +58,9 @@ def load_model():
     model.to(device)
     model.eval()
     return model
+
+model = load_model()
+
 # -----------------------------
 # Image transforms
 # -----------------------------
@@ -76,8 +82,7 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    input_tensor = transform(image).unsqueeze(0)
-    input_tensor = input_tensor.to(device)
+    input_tensor = transform(image).unsqueeze(0).to(device)
 
     with torch.no_grad():
         outputs = model(input_tensor)
@@ -93,5 +98,3 @@ if uploaded_file is not None:
         for i in range(len(CLASS_NAMES))
     }
     st.bar_chart(prob_dict)
-
-
