@@ -3,6 +3,10 @@ from PIL import Image
 import torch
 from torchvision import transforms, models
 
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # Title
 st.title("G.O.A.T Vision 🐐⚽")
 st.write("Soccer Play Classification App")
