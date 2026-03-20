@@ -90,8 +90,8 @@ if uploaded_file is not None:
         predicted_index = torch.argmax(probabilities).item()
 
     if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_container_width=True)
+        image = Image.open(uploaded_file).convert("RGB")
+        st.image(image, caption="Uploaded Image", use_container_width=True)
 
     input_tensor = transform(image).unsqueeze(0).to(device)
 
